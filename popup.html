@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quick Links Saver</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Quick Links</h1>
+
+    <button id="saveCurrent">Save current tab</button>
+
+    <form id="manualForm">
+      <input id="titleInput" type="text" placeholder="Title" />
+      <input id="urlInput" type="url" placeholder="https://example.com" required />
+      <button type="submit">Add manually</button>
+    </form>
+
+    <ul id="linksList"></ul>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

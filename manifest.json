@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Quick Links Saver",
+  "version": "1.0.0",
+  "description": "Save links and access them quickly from the Chrome toolbar.",
+  "permissions": ["storage", "tabs"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Quick Links Saver"
+  },
+  "icons": {
+    "16": "icons/16.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  }
+}
