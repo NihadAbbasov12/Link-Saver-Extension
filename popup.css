@@ -309,8 +309,8 @@ body {
 
 .link-item {
   display: flex;
-  align-items: flex-start;
-  gap: 10px;
+  flex-direction: column;
+  gap: 8px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -319,6 +319,12 @@ body {
   box-shadow: var(--shadow);
   animation: fadeIn 0.2s ease;
   transition: border-color 0.15s ease, transform 0.12s ease;
+}
+
+.link-main {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
 }
 
 .link-item:hover {
@@ -386,10 +392,9 @@ body {
 }
 
 .link-meta {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--text-soft);
   margin-top: 3px;
-  opacity: 0.85;
 }
 
 .title-edit {
@@ -410,17 +415,16 @@ body {
 
 .link-actions {
   display: flex;
-  flex-wrap: wrap;
   justify-content: flex-end;
-  align-content: flex-start;
-  width: 60px;
-  gap: 4px;
-  flex-shrink: 0;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
 }
 
 .mini-btn {
   width: 28px;
   height: 28px;
+  flex-shrink: 0;
   border: 1px solid var(--border);
   border-radius: 8px;
   background: var(--surface-2);
@@ -487,6 +491,17 @@ body {
 .toast.show {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
+}
+
+/* ---------- Keyboard focus ---------- */
+.icon-btn:focus-visible,
+.primary-btn:focus-visible,
+.add-btn:focus-visible,
+.menu-item:focus-visible,
+.mini-btn:focus-visible,
+.clear-search:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .hidden {

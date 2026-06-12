@@ -90,14 +90,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function toast(message) {
+    // The toast doubles as an aria-live region, so it must stay in the DOM
+    // (never display:none) for the text swap to be announced.
     toastEl.textContent = message;
-    toastEl.classList.remove("hidden");
     requestAnimationFrame(() => toastEl.classList.add("show"));
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => {
-      toastEl.classList.remove("show");
-      setTimeout(() => toastEl.classList.add("hidden"), 220);
-    }, 2200);
+    toastTimer = setTimeout(() => toastEl.classList.remove("show"), 2200);
   }
 
   // ---------- Storage ----------
@@ -125,11 +123,24 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function addLink({ title, url }) {
-    if (links.some((item) => item.url === url)) {
+    // Normalize at this single choke point so save-current, manual add and
+    // import all dedup against the same canonical URL form.
+    const normalized = normalizeUrl(url);
+    if (!normalized) {
+      toast("Enter a valid URL");
+      return false;
+    }
+    if (links.some((item) => item.url === normalized)) {
       toast("Already saved");
       return false;
     }
-    links.unshift({ id: uid(), title: title || hostOf(url), url, createdAt: Date.now(), pinned: false });
+    links.unshift({
+      id: uid(),
+      title: title || hostOf(normalized),
+      url: normalized,
+      createdAt: Date.now(),
+      pinned: false,
+    });
     await persist();
     render();
     toast("Saved ✓");
@@ -177,23 +188,26 @@ document.addEventListener("DOMContentLoaded", () => {
           editingId === link.id
             ? `<input class="title-edit" type="text" value="${escapeHtml(link.title)}" />`
             : `<div class="link-title">${escapeHtml(link.title || "Untitled")}</div>`;
+        const pinLabel = link.pinned ? "Unpin" : "Pin to top";
         return `
           <li class="link-item ${link.pinned ? "pinned" : ""}" data-id="${link.id}">
-            <img class="favicon" src="${escapeHtml(faviconUrl(link.url))}" alt=""
-                 data-letter="${escapeHtml(letter)}" data-color="${escapeHtml(colorFor(host))}" />
-            <div class="link-body">
-              ${titleArea}
-              <div class="link-url">${escapeHtml(link.url)}</div>
-              <div class="link-meta">${escapeHtml(host)} · ${timeAgo(link.createdAt)}</div>
+            <div class="link-main">
+              <img class="favicon" src="${escapeHtml(faviconUrl(link.url))}" alt=""
+                   data-letter="${escapeHtml(letter)}" data-color="${escapeHtml(colorFor(host))}" />
+              <div class="link-body">
+                ${titleArea}
+                <div class="link-url">${escapeHtml(link.url)}</div>
+                <div class="link-meta">${escapeHtml(host)} · ${timeAgo(link.createdAt)}</div>
+              </div>
+              <button class="mini-btn star ${link.pinned ? "active" : ""}" data-action="pin"
+                      aria-pressed="${link.pinned ? "true" : "false"}"
+                      aria-label="${pinLabel}" title="${pinLabel}">${link.pinned ? "★" : "☆"}</button>
             </div>
             <div class="link-actions">
-              <button class="mini-btn star ${link.pinned ? "active" : ""}" data-action="pin" title="${
-          link.pinned ? "Unpin" : "Pin to top"
-        }">${link.pinned ? "★" : "☆"}</button>
-              <button class="mini-btn" data-action="open" title="Open in new tab">↗</button>
-              <button class="mini-btn" data-action="copy" title="Copy URL">⧉</button>
-              <button class="mini-btn" data-action="edit" title="Edit title">✎</button>
-              <button class="mini-btn" data-action="delete" title="Delete">🗑</button>
+              <button class="mini-btn" data-action="open" aria-label="Open in new tab" title="Open in new tab">↗</button>
+              <button class="mini-btn" data-action="copy" aria-label="Copy URL" title="Copy URL">⧉</button>
+              <button class="mini-btn" data-action="edit" aria-label="Edit title" title="Edit title">✎</button>
+              <button class="mini-btn" data-action="delete" aria-label="Delete" title="Delete">🗑</button>
             </div>
           </li>`;
       })
