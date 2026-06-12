@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Quick Links Saver",
-  "version": "1.0.0",
-  "description": "Save links and access them quickly from the Chrome toolbar.",
+  "version": "2.0.0",
+  "description": "Save, search, pin and organize links with a clean light/dark UI — plus copy, edit, import/export and open-all.",
   "permissions": ["storage", "tabs"],
   "action": {
     "default_popup": "popup.html",

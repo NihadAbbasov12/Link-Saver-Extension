@@ -7,19 +7,59 @@
   <link rel="stylesheet" href="popup.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>Quick Links</h1>
+  <div class="app">
+    <header class="app-header">
+      <div class="brand">
+        <span class="brand-mark">🔗</span>
+        <div class="brand-text">
+          <h1>Quick Links</h1>
+          <span id="counter" class="counter">0 saved</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="themeToggle" class="icon-btn" title="Toggle theme" aria-label="Toggle theme">🌙</button>
+        <button id="menuToggle" class="icon-btn" title="More options" aria-label="More options">⋯</button>
+      </div>
+    </header>
 
-    <button id="saveCurrent">Save current tab</button>
+    <div id="menu" class="menu hidden">
+      <button id="exportBtn" class="menu-item">⬇️ Export links</button>
+      <button id="importBtn" class="menu-item">⬆️ Import links</button>
+      <button id="openAllBtn" class="menu-item">🚀 Open all (filtered)</button>
+      <button id="clearAllBtn" class="menu-item danger">🗑️ Clear all</button>
+      <input id="importFile" type="file" accept="application/json" hidden />
+    </div>
 
-    <form id="manualForm">
-      <input id="titleInput" type="text" placeholder="Title" />
-      <input id="urlInput" type="url" placeholder="https://example.com" required />
-      <button type="submit">Add manually</button>
+    <div class="toolbar">
+      <button id="saveCurrent" class="primary-btn">
+        <span class="btn-icon">＋</span> Save current tab
+      </button>
+    </div>
+
+    <form id="manualForm" class="manual-form">
+      <input id="titleInput" type="text" placeholder="Title (optional)" />
+      <div class="url-row">
+        <input id="urlInput" type="url" placeholder="https://example.com" required />
+        <button type="submit" class="add-btn" title="Add link">Add</button>
+      </div>
     </form>
 
-    <ul id="linksList"></ul>
+    <div class="search-wrap">
+      <span class="search-icon">🔎</span>
+      <input id="searchInput" type="text" placeholder="Search saved links…" />
+      <button id="clearSearch" class="clear-search hidden" title="Clear search" aria-label="Clear search">✕</button>
+    </div>
+
+    <ul id="linksList" class="links-list"></ul>
+
+    <div id="emptyState" class="empty-state hidden">
+      <div class="empty-emoji">📭</div>
+      <p class="empty-title">Nothing here yet</p>
+      <p class="empty-sub">Save the current tab or add a link manually to get started.</p>
+    </div>
   </div>
+
+  <div id="toast" class="toast hidden"></div>
 
   <script src="popup.js"></script>
 </body>
